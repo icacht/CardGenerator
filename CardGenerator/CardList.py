@@ -36,6 +36,9 @@ class CardList:
                 FW.writeFile(tree, dist_path / name, file_type)
 
     def ConstractDeck(self, file_path: Path, img_file_type: str) -> None:
+        if self.loadedDeck is None:
+            raise Exception("Deck Settings is Not Found.")
+
         with FW.ResourceArchiver(file_path) as fp:
             self.loadedDeck.InitDeck(fp)
 
