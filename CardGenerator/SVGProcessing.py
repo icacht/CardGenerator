@@ -43,7 +43,7 @@ def setText(element: ET.Element, text: str, style: SE.Element):
     font_size = TP.adjustFontSize(
         text, style.font_size, style.width, style.linage_max)
     texts = TP.wrapText(text, font_size, style.width)
-    print(font_size, texts)
+    # print(font_size, texts)
 
     se = ET.SubElement(element, 'text')
     se.set('font-family', style.font_family)
