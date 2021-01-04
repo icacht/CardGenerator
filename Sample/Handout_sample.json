@@ -1,14 +1,36 @@
 {
-    "style": [
-        {
+    "deck": {
+        "deck_name": "サンプルハンドアウト",
+        "card_up_key": "up",
+        "card_down_key": "down",
+        "card_name_key": "title",
+        "card_text": [
+            {
+                "key": "shock",
+                "name": "ショック",
+                "type": "note"
+            },
+            {
+                "key": "secret",
+                "name": "秘密",
+                "type": "note"
+            },
+            {
+                "key": "futter",
+                "name": "シナリオ"
+            }
+        ]
+    },
+    "style": {
+        "up": {
             "style_file": "Sample/SimpleHandout_up.svg",
             "file_name": "Handout_{0}_up"
         },
-        {
+        "down": {
             "style_file": "Sample/SimpleHandout_down.svg",
             "file_name": "Handout_{0}_down"
         }
-    ],
+    },
     "text": [
         {
             "title": "PC①",

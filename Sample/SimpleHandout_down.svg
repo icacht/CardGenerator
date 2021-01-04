@@ -1,58 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 464 760" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <g stroke-width="1px">
-  <rect x="0" y="0" width="464" height="760" fill="#383335" stroke="#383335"/>
-  <rect x="22.9" y="122.4" width="420" height="540" fill="#fff"/>
-  <g fill="none" stroke="#000">
-   <rect x="14" y="65" width="440" height="680" stroke="#fff" stroke-width="3.8"/>
-   <path d="m134 69v51.5" stroke="#fff" />
-   <path d="m134 124v70" />
-   <path d="m24 195.54h420" />
-   <path d="m24 198.55h420" />
+ <g>
+  <rect x="0" y="0" width="464" height="760" fill="#fff"/>
+  <g fill="none" stroke="#000" stroke-width="1px">
+   <rect x="12" y="68" width="439.5" height="675" stroke-width="3"/>
+   <rect x="19.7" y="75" width="424.5" height="660" />
+   <path d="m118.7 75v70" />
+   <path d="m21 145h423" />
+   <path d="m21 148h423" />
+   <path d="m21 196.4h423" />
    <g stroke-dasharray="2.00, 4.00">
-    <path d="m24 285.54h420" />
-    <path d="m24 375.54h420" />
-    <path d="m24 465.54h420" />
-    <path d="m24 555.54h420" />
-    <path d="m24 645.54h420" />
+    <path d="m24 285.54h420"/>
+    <path d="m24 375.54h420"/>
+    <path d="m24 465.54h420"/>
+    <path d="m24 555.54h420"/>
+    <path d="m24 645.54h420"/>
    </g>
   </g>
-  <g fill="#ffffff" font-family="KaiTi" word-spacing="0px" letter-spacing="0px" style="line-height:1.25">
-   <text font-family="Chiller" font-size="54px" letter-spacing="8px" stroke-width="3.8" xml:space="preserve"><tspan x="151" y="50">Handout</tspan></text>
-   <text font-size="32px" xml:space="preserve"><tspan x="45" y="110">秘密</tspan></text>
-   <text font-size="32px" letter-spacing="-8px" fill="#000000" xml:space="preserve"><tspan x="27" y="172">ショック</tspan></text>
-   <text font-family="'BIZ UDMincho Medium'" font-size="24px" xml:space="preserve"><tspan x="120" y="694">この秘密を自分から</tspan><tspan x="120" y="725">明らかにすることはできない</tspan></text>
-   <text font-family="'BIZ UDMincho Medium'" font-size="54px" xml:space="preserve"><tspan x="50" y="723">注</tspan></text>
-  </g>
+ </g>
+ <g fill="#000000" font-family="KaiTi" word-spacing="0px">
+  <text font-family="Chiller" font-size="54px" letter-spacing="8px" xml:space="preserve"><tspan x="151" y="55">Handout</tspan></text>
+  <text font-size="40px" xml:space="preserve"><tspan x="26" y="125">名前</tspan></text>
+  <text font-size="32px" xml:space="preserve"><tspan x="187" y="185">使命</tspan></text>
  </g>
  <g id="layer_text">
-  <g id="title" transform="translate(140 115)" fill="#ffffff" />
-  <g id="shock" transform="translate(135 180)" />
-  <g id="secret" transform="translate(27 227)" />
-  <g id="futter" transform="translate(440 640)" text-anchor="end" />
+  <g id="title" transform="translate(120 132)" />
+  <g id="text" transform="translate(25 230)" />
+  <g id="futter" transform="translate(440 726)" text-anchor="end" />
  </g>
 </svg>
 <!--element
 {
     "title":{
         "font_family":"KaiTi",
-        "font_size":50,
+        "font_size":56,
         "linage_max":1,
-        "width":300,
-        "height_align":"center"
+        "width":315,
+        "height_align": "center"
     },
-    "shock":{
-        "font_family":"KaiTi",
-        "font_size":52,
-        "linage_max":2,
-        "line_height":35,
-        "width":300,
-        "height_align":"lower"
-    },
-    "secret":{
+    "text":{
         "font_family":"メイリオ",
         "font_size":24,
-        "linage_max":9,
+        "linage_max":11,
         "line_height":45,
         "width":415
     },

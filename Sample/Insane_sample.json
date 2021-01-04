@@ -1,10 +1,32 @@
 {
-    "style": [
-        {
-            "style_file": "Sample/SimpleInsane_down.svg",
-            "file_name": "Insane_{0}_down"
+    "deck": {
+        "deck_name": "サンプル狂気カード",
+        "card_down": "Sample/SimpleInsane_down.svg",
+        "card_up_key": "up",
+        "card_name_key": "title",
+        "card_text": [
+            {
+                "key": "trigger",
+                "name": "トリガー",
+                "type": "note"
+            },
+            {
+                "key": "text",
+                "name": "説明",
+                "type": "note"
+            },
+            {
+                "key": "futter",
+                "name": "種別"
+            }
+        ]
+    },
+    "style": {
+        "up": {
+            "style_file": "Sample/SimpleInsane_up.svg",
+            "file_name": "Insane_{0}_up"
         }
-    ],
+    },
     "text": [
         {
             "title": "氾濫",
