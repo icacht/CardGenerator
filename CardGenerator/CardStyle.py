@@ -1,4 +1,5 @@
 from dataclasses import dataclass, InitVar
+from typing import Any
 from pathlib import Path
 import json
 import xml.etree.ElementTree as ET
@@ -6,18 +7,21 @@ import xml.etree.ElementTree as ET
 from . import StyleElement as SE
 from . import SVGProcessing as SP
 
-def readExpandSvg(file_path: str):
+def separateElements(text: str) -> dict[str, Any]:
     start_mark = '<!--element'
     end_mark = '-->'
 
-    buf = Path(file_path).read_text(encoding='UTF-8')
-    start_index = buf.index(start_mark)
-    end_index = buf.index(end_mark, start_index)
+    start_index = text.index(start_mark)
+    end_index = text.index(end_mark, start_index)
 
-    elementBuf = buf[start_index: end_index].lstrip(start_mark)
+    elementBuf = text[start_index: end_index].lstrip(start_mark)
     elements = json.loads(elementBuf)
 
-    return buf, elements
+    return elements
+
+def readExpandSvg(file_path: str) -> tuple[str, dict[str, Any]]:
+    buf = Path(file_path).read_text(encoding='UTF-8')
+    return buf, separateElements(buf)
 
 @dataclass
 class CardStyle:
