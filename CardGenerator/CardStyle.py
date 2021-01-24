@@ -19,20 +19,21 @@ def separateElements(text: str) -> dict[str, Any]:
 
     return elements
 
-def readExpandSvg(file_path: str) -> tuple[str, dict[str, Any]]:
-    buf = Path(file_path).read_text(encoding='UTF-8')
+def readExpandSvg(file_path: Path) -> tuple[str, dict[str, Any]]:
+    buf = file_path.read_text(encoding='UTF-8')
     return buf, separateElements(buf)
 
 @dataclass
 class CardStyle:
     style_file: InitVar[str]
     file_name: str = "{0}"
+    file_root: InitVar[Path] = Path('.')
 
     loadedSvg: str = None
     loadedElements: dict[str, SE.Element] = None
 
-    def __post_init__(self, style_file):
-        (self.loadedSvg, elements) = readExpandSvg(style_file)
+    def __post_init__(self, style_file: str, file_root: Path):
+        (self.loadedSvg, elements) = readExpandSvg(file_root / style_file)
         self.loadedElements = {k: SE.Element(**v) for k, v in elements.items()}
 
     def GenerateSVG(self, texts: dict[str, str]) -> tuple[str, ET.ElementTree]:

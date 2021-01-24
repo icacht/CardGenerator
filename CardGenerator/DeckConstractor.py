@@ -55,6 +55,7 @@ class CardText:
 
 @dataclass
 class DeckConstractor:
+    archive_name: InitVar[Path]
     deck_name: str
     card_name_key: str
     card_text: InitVar[list[dict[str, str]]]
@@ -62,35 +63,53 @@ class DeckConstractor:
     card_up_key: str = None
     card_down: str = None
     card_down_key: str = None
+    file_root: Path = Path('.')
 
     loadedCardText: list[CardText] = None
-    loadedCardUp: str = None
-    loadedCardDown: str = None
 
-    def __post_init__(self, card_text) -> None:
+    def __post_init__(self, archive_name, card_text) -> None:
         self.loadedCardText = [CardText(**t) for t in card_text]
 
-    def InitDeck(self, fp: FW.ResourceArchiver):
         self.root = ET.fromstring(DeckBase)
         addText(self.root,
             ".//data[@name='common']/data[@name='name']", self.deck_name)
         self.cardRoot = findElement(self.root, ".//node[@name='cardRoot']")
 
-        if self.card_up:
-            self.loadedCardUp = fp.AddResource(Path(self.card_up))
-        if self.card_down:
-            self.loadedCardDown = fp.AddResource(Path(self.card_down))
+        self.archiver = FW.ResourceArchiver(archive_name)
 
-    def AddCard(self, text: dict[str, str], img: dict[str, str]) -> None:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _treceback):
+        self.close()
+        return False
+    
+    def close(self) -> None:
+        self.archiver.close()
+
+    def AddCard(self,
+            text: dict[str, str],
+            img: dict[str, tuple[ET.ElementTree, str]]) -> None:
         card = ET.fromstring(CardBase)
 
-        addText(card, ".//data[@name='common']/data[@name='name']", text[self.card_name_key])
+        if self.card_up:
+            up_name = self.archiver.AddResource(
+                self.file_root / Path(self.card_up.format(**text)))
+        else:
+            up_name = self.archiver.AddSVG(*img[self.card_up_key])
+
+        if self.card_down:
+            down_name = self.archiver.AddResource(
+                self.file_root / Path(self.card_down.format(**text)))
+        else:
+            down_name = self.archiver.AddSVG(*img[self.card_down_key])
+
         addText(card,
-            ".//data[@name='image']/data[@type='image'][@name='front']",
-            self.loadedCardUp if self.loadedCardUp else img[self.card_up_key])
+            ".//data[@name='common']/data[@name='name']", text[self.card_name_key])
         addText(card,
-            ".//data[@name='image']/data[@type='image'][@name='back']",
-            self.loadedCardDown if self.loadedCardDown else img[self.card_down_key])
+            ".//data[@name='image']/data[@type='image'][@name='front']", up_name)
+        addText(card,
+            ".//data[@name='image']/data[@type='image'][@name='back']", down_name)
 
         detail = findElement(card, ".//data[@name='detail']")
         for ct in self.loadedCardText:
@@ -105,5 +124,6 @@ class DeckConstractor:
  
         self.cardRoot.append(card)
 
-    def GetRoot(self) -> ET.Element:
-        return self.root
+    def WriteRoot(self) -> None:
+        deck_str = ET.tostring(self.root, encoding='UTF-8', xml_declaration=True)
+        self.archiver.AddTextFile(deck_str, "data.xml")

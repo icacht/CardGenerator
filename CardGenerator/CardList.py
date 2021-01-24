@@ -13,15 +13,15 @@ from . import FileWriter as FW
 class CardList:
     style: InitVar[dict[str, dict[str, str]]]
     text: list[dict[str, str]]
-    deck: InitVar[dict[str, Any]] = None
+    deck: dict[str, Any] = None
+    file_root: Path = Path('.')
 
-    loadedDeck: DC.DeckConstractor = None
     loadedStyle: dict[str, CS.CardStyle] = None
 
-    def __post_init__(self, style, deck):
-        self.loadedStyle = {k: CS.CardStyle(**s) for k, s in style.items()}
-        if deck:
-            self.loadedDeck = DC.DeckConstractor(**deck)
+    def __post_init__(self, style):
+        self.loadedStyle = {
+            k: CS.CardStyle(**s, file_root=self.file_root)
+            for k, s in style.items()}
 
     def GenerateSVG(self) -> tp.Iterator[tuple[
                                 dict[str, str],
@@ -36,21 +36,23 @@ class CardList:
                 FW.writeFile(tree, dist_path / name, file_type)
 
     def ConstractDeck(self, file_path: Path, img_file_type: str) -> None:
-        if self.loadedDeck is None:
+        if self.deck is None:
             raise Exception("Deck Settings is Not Found.")
 
-        with FW.ResourceArchiver(file_path) as fp:
-            self.loadedDeck.InitDeck(fp)
-
+        with DC.DeckConstractor(
+                archive_name=file_path,
+                **self.deck,
+                file_root=self.file_root) as deck_constractor:
             for text, trees in self.GenerateSVG():
-                imgs = {k: fp.AddSVG(tree, img_file_type) for k, (_name, tree) in trees.items()}
-                self.loadedDeck.AddCard(text, imgs)
-
-            deck_str = ET.tostring(self.loadedDeck.GetRoot(), encoding='UTF-8', xml_declaration=True)
-            fp.AddTextFile(deck_str, "data.xml")
+                imgs = {
+                    k: (tree, img_file_type)
+                    for k, (_name, tree) in trees.items()}
+                deck_constractor.AddCard(text, imgs)
+            deck_constractor.WriteRoot()
 
 def loadJson(card_list_file: str):
-    with Path(card_list_file).open(encoding='utf-8') as f:
+    file_path = Path(card_list_file)
+    with file_path.open(encoding='utf-8') as f:
         card_list_dict = json.load(f)
     
-    return CardList(**card_list_dict)
+    return CardList(**card_list_dict, file_root=file_path.parent)

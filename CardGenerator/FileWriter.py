@@ -42,6 +42,7 @@ class ResourceArchiver:
     def __init__(self, file_name: Path):
         file_name_zip = file_name.with_suffix('.zip')
         self.zipFile = ZipFile(file_name_zip, 'w')
+        self.file_name_cache: dict[str, str] = {}
 
     def __enter__(self):
         return self
@@ -63,6 +64,9 @@ class ResourceArchiver:
         return name
 
     def AddResource(self, file_path: Path, arcname: str=None) -> str:
+        if str(file_path) in self.file_name_cache:
+            return self.file_name_cache[str(file_path)]
+
         if arcname:
             self.zipFile.write(file_path, arcname)
             return arcname
@@ -70,6 +74,7 @@ class ResourceArchiver:
         data = file_path.read_bytes()
         name = hashlib.sha256(data).hexdigest()
         self.zipFile.write(file_path, name + file_path.suffix)
+        self.file_name_cache[str(file_path)] = name
         return name
 
     def AddSVG(self, tree: ET.ElementTree, file_type: str, arcname: str=None) -> str:
